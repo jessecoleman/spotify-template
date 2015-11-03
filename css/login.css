@@ -1,0 +1,21 @@
+/*
+    Cole Chamberlin
+    11/2/15
+    INFO 343
+    Spotify Challenge
+
+    This file provides styles for the login.html page
+*/
+
+.container {
+    display: table;
+}
+
+body {
+    height: 100%;
+}
+
+.row {
+    display: table-cell;
+    vertical-align: middle;
+}
