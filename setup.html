@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+	<meta charset="UTF-8">
+	<title></title>
+
+	<!-- Angular, jQuery, Parse, Materialize -->
+	<script src="bower_components/angular/angular.min.js"></script>
+	<script src="bower_components/angular-spotify/dist/angular-spotify.min.js"></script>
+	<script src="https://code.jquery.com/jquery.min.js"></script>
+	<script src="//www.parsecdn.com/js/parse-1.6.0.min.js"></script>
+	<script type="text/javascript" src="js/materialize.min.js"></script>
+	<link rel="stylesheet" href="css/materialize.min.css" />
+	<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+
+	<!-- Custom files -->
+	<script type="text/javascript" src="js/setup.js"></script>
+	<link rel="stylesheet" href="css/app.css" />
+</head>
+<body ng-app="setup" ng-controller="setupCtrl">
+	<nav>
+		<div class="nav-wrapper light-green darken-1">
+			<span class="brand-logo center">Find New Music</span>
+			<ul id="nav-mobile" class="right hide-on-med-and-down">
+				<li><a href="login.html">Login</a></li>
+			</ul>
+		</div>
+	</nav>
+	<div class="container section">
+		<div class="row">
+		<!-- Form -->
+			<form name="songForm">
+				<div class="input-field">
+					<label>Search Artists</label>
+					<input name="search" type="text" ng-model="artist" class="form-control" />
+				</div>
+				<div class="form-group">
+					<button ng-disabled="songForm.search.$invalid" class="btn btn-primary" ng-click="searchArtists()" type="submit">Submit</button>
+				</div>
+			</form>
+		</div>
+
+		<!-- Results -->
+		<div class="container-fixed">
+			<ul ul class="collapsible popout" data-collapsible="accordion">
+				<li ng-repeat="artist in artists" class="collapsible-header">
+					<div class="collapsible-header">
+						<img src={{artist.images[0].url}} class="circle profile">
+						{{artist.name}}
+					</div>
+					<div class="collapsible-body">
+						<span ng-repeat="genre in artist.genres" class="chip">{{genre}}</span>
+					</div>
+				</li>
+
+			</ul>
+		</div>
+
+	</div>
+	</div>
+</nav>
+</body>
+</html>

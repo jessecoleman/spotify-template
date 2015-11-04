@@ -1,12 +1,17 @@
 var data;
-var baseUrl = 'https://api.spotify.com/v1/search?type=track&query=';
-var myApp = angular.module('myApp', []);
+var myApp = angular.module('myApp', ['spotify']);
 
-var myCtrl = myApp.controller('myCtrl', function($scope, $http) {
+var myCtrl = myApp.controller('myCtrl', function($scope, $http, Spotify) {
     //initialize parse
     Parse.initialize('K92M0Xnysfub72aYyHT8bsiFaYBYDtfna97NrMkW', '1G3zUReCcA8NoPsp4WIMRFxxOEUgOiJDOuWtune6');
 
-    $scope.audioObject = {};
+	Spotify.getAlbumTracks('6akEvsycLGftJxYudPjmqK').then(function (data) {
+		$scope.tracks = data.items;
+		console.log(data);
+	});
+
+    /*
+	$scope.audioObject = {};
     $scope.getSongs = function() {
         $http.get(baseUrl + $scope.track).success(function(response){
             data = $scope.tracks = response.tracks.items
@@ -25,7 +30,7 @@ var myCtrl = myApp.controller('myCtrl', function($scope, $http) {
           $scope.audioObject.play();
           $scope.currentSong = song;
         }
-    }
+    }*/
 });
 
 // Add tool tips to anything with a title property
