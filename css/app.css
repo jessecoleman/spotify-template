@@ -23,6 +23,7 @@ html {
     margin-left: 0;
 }
 
-li {
-    font-size: 1.5em;
+li button {
+    width: 1.5em;
+    float: right;
 }
