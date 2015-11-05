@@ -6,58 +6,73 @@
 
     This file contains all the logic for login.html
  */
-(function() {
-    $(document).ready(function() {
-        $('#signup').hide();
-        //initialize parse
-        Parse.initialize('K92M0Xnysfub72aYyHT8bsiFaYBYDtfna97NrMkW', '1G3zUReCcA8NoPsp4WIMRFxxOEUgOiJDOuWtune6');
 
-        var logout = window.location.search.substring(1);
-        if(logout) {
-            Parse.User.logOut();
-        }
+var loginApp = angular.module('loginApp', ['firebase']);
 
-        $('#sign-up').click(function() {
-            $('#signup').show();
-            $('#login').hide();
-            $('#signup-text').hide();
-        });
+var loginCtrl = loginApp.controller('loginCtrl', function($scope, $http, $firebaseAuth, $firebaseObject, $firebaseArray) {
+	//initialize firebase
+	var ref = new Firebase("https://showfinder.firebaseio.com");
+	var users = ref.child('Users');
 
-        $('#login-button').click(function() {
-            var username = $('#username').val();
-            var password = $('#password').val();
+	$scope.users = $firebaseObject(users);
+	$scope.authObj = $firebaseAuth(ref);
 
-            Parse.User.logIn(username, password, {
-                success: function() {
-                    window.location.replace('index.html');
-                },
-                error: function() {
-                    alert(error.code + ' ' + error.message);
-                }
-            })
-        });
+	// display sign in first
+	$scope.signUpView = false;
 
-        $('#signup-button').click(function() {
-            var username = $('#new-username').val();
-            var password = $('#new-password').val();
-            var passwordConfirm = $('#new-password-confirm').val();
+	var authData = $scope.authObj.$getAuth();
 
-            if(password === passwordConfirm) {
-                var user = new Parse.User();
-                user.set('username', username);
-                user.set('password', password);
 
-                user.signUp(null, {
-                    success: function() {
-                        window.location.replace('index.html');
-                    },
-                    error: function(user, error) {
-                        alert(error.code + ' ' + error.message);
-                    }
-                });
-            } else {
-                alert('Passwords don\'t match');
-            }
-        });
-    });
-})();
+	if(authData) {
+		$scope.userId = authData.uid;
+		/*
+		$scope.logOut()
+		.then(window.location.replace("index.html"));
+		*/
+	}
+
+
+	// SignUp
+	$scope.signUp = function() {
+		$scope.authObj.$createUser({
+			email: $scope.newEmail,
+			password: $scope.newPassword
+		}).then($scope.logIn())
+		.then(function (authData) {
+			$scope.users[authData.uid] = {
+				//set user data
+				email: $scope.newEmail,
+				favedArtists: []
+			};
+			$scope.users.$save();
+			window.location.replace("index.html");
+		}).catch(function (error) {
+			console.error("Error: ", error);
+		});
+	};
+
+	// SignIn
+	$scope.signIn = function() {
+		$scope.logIn()
+		.then(function (authData) {
+			$scope.userId = authData.uid;
+			window.location.replace("index.html");
+		});
+	};
+
+	// LogIn
+	$scope.logIn = function() {
+		return $scope.authObj.$authWithPassword({
+			email: $scope.email,
+			password: $scope.password
+		})
+	};
+
+	// LogOut
+	$scope.logOut = function() {
+		$scope.authObj.$unauth();
+		$scope.userId = null;
+		return;
+	};
+
+});

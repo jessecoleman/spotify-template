@@ -1,14 +1,31 @@
-var setup = angular.module('setup', ['spotify']);
+var setupApp = angular.module('setupApp', ['spotify', 'firebase']);
 
-var setupCtrl = setup.controller('setupCtrl', function($scope, $http, Spotify) {
-	//initialize parse
-	Parse.initialize('K92M0Xnysfub72aYyHT8bsiFaYBYDtfna97NrMkW', '1G3zUReCcA8NoPsp4WIMRFxxOEUgOiJDOuWtune6');
+var setupCtrl = setupApp.controller('setupCtrl', function($scope, $http, $firebaseAuth, $firebaseObject, $firebaseArray,  Spotify) {
+	//initialize firebase
+	var ref = new Firebase("https://showfinder.firebaseio.com");
+	var users = ref.child('Users');
+
+	$scope.users = $firebaseObject(users);
+	$scope.authObj = $firebaseAuth(ref);
+
+	//initialize auth, get user
+	var authData = $scope.authObj.$getAuth();
+	if (authData) {
+		$scope.userId = authData.uid;
+	}
+
+	$('.collapsible').collapsible();
 
 	$scope.searchArtists = function() {
 		Spotify.search($scope.artist, 'artist').then(function (data) {
 			$scope.artists = data.artists.items;
-			console.log($scope.artists);
 		});
+	};
+
+	$scope.addArtist = function(artist) {
+		console.log(artist);
+		// add artist id to user's faved artist list
+		$scope.users[authData.uid].favedArtists.add(artist.id);
 	};
 
 	/*

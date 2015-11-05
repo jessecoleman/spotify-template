@@ -4,9 +4,11 @@
 	<meta charset="UTF-8">
 	<title></title>
 
-	<!-- Angular, jQuery, Parse, Materialize -->
-	<script src="bower_components/angular/angular.min.js"></script>
+	<!-- Angular, Firebase, jQuery, Parse, Materialize -->
+	<script src="bower_components/angular/angular.js"></script>
 	<script src="bower_components/angular-spotify/dist/angular-spotify.min.js"></script>
+	<script src="https://cdn.firebase.com/js/client/2.2.4/firebase.js"></script>
+	<script src="https://cdn.firebase.com/libs/angularfire/1.1.3/angularfire.min.js"></script>
 	<script src="https://code.jquery.com/jquery.min.js"></script>
 	<script src="//www.parsecdn.com/js/parse-1.6.0.min.js"></script>
 	<script type="text/javascript" src="js/materialize.min.js"></script>
@@ -17,12 +19,18 @@
 	<script type="text/javascript" src="js/setup.js"></script>
 	<link rel="stylesheet" href="css/app.css" />
 </head>
-<body ng-app="setup" ng-controller="setupCtrl">
+<body ng-app="setupApp" ng-controller="setupCtrl">
 	<nav>
 		<div class="nav-wrapper light-green darken-1">
-			<span class="brand-logo center">Find New Music</span>
-			<ul id="nav-mobile" class="right hide-on-med-and-down">
-				<li><a href="login.html">Login</a></li>
+			<a href="index.html" class="brand-logo center">Show Finder</a>
+			<ul id="nav-mobile" class="left hide-on-med-and-down">
+				<li><a href="setup.html">Pick</a></li>
+				<li><a href="index.html">Find</a></li>
+				<li><a href="#">About</a></li>
+			</ul>
+			<ul class="right">
+				<li><a href="#" ng-show="userId">{{users[authData].email}}</a></li>
+				<li><a href="login.html">{{userId ? 'Logout' : 'Login'}}</a></li>
 			</ul>
 		</div>
 	</nav>
@@ -43,11 +51,11 @@
 		<!-- Results -->
 		<div class="container-fixed">
 			<ul ul class="collapsible popout" data-collapsible="accordion">
-				<li ng-repeat="artist in artists" class="collapsible-header">
+				<li ng-repeat="artist in artists">
 					<div class="collapsible-header">
 						<img src={{artist.images[0].url}} class="circle profile">
 						{{artist.name}}
-						<button class="btn-flat green waves-effect waves-light"><i class="material-icons">add</i></button>
+						<button class="btn-flat btn-floating white waves-effect waves-dark favorite" ng-show="userId" ng-click="addArtist(artist)"><i class=" green-text material-icons">add</i></button>
 					</div>
 					<div class="collapsible-body">
 						<span ng-repeat="genre in artist.genres" class="chip">{{genre}}</span>
