@@ -29,8 +29,8 @@
 				<li><a href="#">About</a></li>
 			</ul>
 			<ul class="right">
-				<li><a href="#" ng-show="userId">{{users[authData].email}}</a></li>
-				<li><a href="login.html">{{userId ? 'Logout' : 'Login'}}</a></li>
+				<li><a href="#" ng-show="user.id">{{users[user.id].email}}</a></li>
+				<li><a href="login.html" ng-click="logOut()">{{user.id ? 'Logout' : 'Login'}}</a></li>
 			</ul>
 		</div>
 	</nav>
@@ -53,15 +53,14 @@
 			<ul ul class="collapsible popout" data-collapsible="accordion">
 				<li ng-repeat="artist in artists">
 					<div class="collapsible-header">
-						<img src={{artist.images[0].url}} class="circle profile">
+						<img src="{{artist.images[0].url}}" class="circle profile">
 						{{artist.name}}
-						<button class="btn-flat btn-floating white waves-effect waves-dark favorite" ng-show="userId" ng-click="addArtist(artist)"><i class=" green-text material-icons">add</i></button>
+						<button ng-class="" class="btn-flat btn-floating waves-effect waves-dark favorite" ng-show="user.id" ng-click="addArtist(artist)"><i class=" green-text material-icons">{{users[user.id].favedArtists.includes('test') ? 'delete' : 'add'}}</i></button>
 					</div>
 					<div class="collapsible-body">
 						<span ng-repeat="genre in artist.genres" class="chip">{{genre}}</span>
 					</div>
 				</li>
-
 			</ul>
 		</div>
 

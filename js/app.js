@@ -1,11 +1,11 @@
-var myApp = angular.module('myApp', ['spotify']);
+var myApp = angular.module('myApp', ['spotify', 'firebase']);
 
 var myCtrl = myApp.controller('myCtrl', function($scope, $http, $firebaseAuth, $firebaseObject, $firebaseArray,  Spotify) {
     //initialize firebase
     var ref = new Firebase("https://showfinder.firebaseio.com");
-    var users = ref.child('Users');
+    var usersRef = ref.child('users');
 
-    $scope.users = $firebaseObject(users);
+    $scope.users = $firebaseObject(usersRef);
     $scope.authObj = $firebaseAuth(ref);
 
     //initialize auth, get user
@@ -16,7 +16,6 @@ var myCtrl = myApp.controller('myCtrl', function($scope, $http, $firebaseAuth, $
 
 	Spotify.getAlbumTracks('6akEvsycLGftJxYudPjmqK').then(function (data) {
 		$scope.tracks = data.items;
-		console.log(data);
 	});
 
 });
