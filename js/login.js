@@ -45,7 +45,7 @@ var loginCtrl = loginApp.controller('loginCtrl', function($scope, $http, $fireba
 			$scope.users[authData.uid] = {
 				//set user data
 				email: $scope.newEmail,
-				favedArtists: ['test']
+				favedArtists: {'favedArtists': []}
 			};
 			//save firebase array
 			$scope.users.$save();

@@ -16,6 +16,7 @@ body {
 }
 
 .row {
+
     display: table-cell;
     vertical-align: middle;
 }

@@ -5,6 +5,7 @@ var setupCtrl = setupApp.controller('setupCtrl', function($scope, $http, $fireba
 	var ref = new Firebase("https://showfinder.firebaseio.com");
 	var usersRef = ref.child('users');
 
+	//make users firebaseObject and firebaseAuth available to scope
 	$scope.users = $firebaseObject(usersRef);
 	$scope.authObj = $firebaseAuth(ref);
 
@@ -13,9 +14,8 @@ var setupCtrl = setupApp.controller('setupCtrl', function($scope, $http, $fireba
 	if (authData) {
 		$scope.user = {
 			'id': authData.uid,
-			'favedArtists': []
+			'favedArtists': $firebaseObject(usersRef.child(authData.uid))
 		};
-		console.log($scope.users['9ed80f37-c1c6-4330-9a8f-cd6308dc26b9']);
 	}
 
 	$('.collapsible').collapsible();
@@ -27,6 +27,7 @@ var setupCtrl = setupApp.controller('setupCtrl', function($scope, $http, $fireba
 	};
 
 	$scope.addArtist = function(artist) {
+		/*
 		// add artist id to user's faved artist list
 		if($scope.user.favedArtists.indexOf(artist.id) != -1) {
 			$scope.user.favedArtists.push(artist.id);
@@ -34,8 +35,9 @@ var setupCtrl = setupApp.controller('setupCtrl', function($scope, $http, $fireba
 			//remove artist from user's faved artists
 			$scope.user.favedArtists.splice($scope.user.favedArtists.indexOf(artist.id), 1);
 		}
-		$scope.users[authData.uid].favedArtists = $scope.user.favedArtists;
-		$scope.users.$save();
+		*/
+		$scope.user.favedArtists.$add(artist.id);
+		$scope.user.favedArtists.$save();
 	};
 
 	$scope.faved = function(artist) {
