@@ -31,8 +31,8 @@
 				<li><a href="#">About</a></li>
 			</ul>
 			<ul class="right">
-				<li><a href="#" ng-show="userId">{{users[userId].email}}</a></li>
-				<li><a href="login.html" ng-click="logOut()">{{userId ? 'Logout' : 'Login'}}</a></li>
+				<li><a href="#" ng-show="user">{{user.email}}</a></li>
+				<li><a href="login.html" ng-click="logOut()">{{user ? 'Logout' : 'Login'}}</a></li>
 			</ul>
 		</div>
 	</nav>

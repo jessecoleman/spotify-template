@@ -29,8 +29,8 @@
 				<li><a href="#">About</a></li>
 			</ul>
 			<ul class="right">
-				<li><a href="#" ng-show="user.id">{{users[user.id].email}}</a></li>
-				<li><a href="login.html" ng-click="logOut()">{{user.id ? 'Logout' : 'Login'}}</a></li>
+				<li><a href="#" ng-show="user">{{user.email}}</a></li>
+				<li><a href="login.html" ng-click="logOut()">{{user ? 'Logout' : 'Login'}}</a></li>
 			</ul>
 		</div>
 	</nav>
@@ -43,19 +43,25 @@
 					<input name="search" type="text" ng-model="artist" class="form-control" />
 				</div>
 				<div class="form-group">
-					<button ng-disabled="songForm.search.$invalid" class="btn btn-primary" ng-click="searchArtists()" type="submit">Submit</button>
+					<button ng-disabled="songForm.search.$invalid"
+					        class="btn btn-primary" ng-click="searchArtists()"
+					        type="submit">Submit</button>
 				</div>
 			</form>
 		</div>
 
 		<!-- Results -->
-		<div class="container-fixed">
+		<div class="container-fixed">   
 			<ul ul class="collapsible popout" data-collapsible="accordion">
 				<li ng-repeat="artist in artists">
 					<div class="collapsible-header">
-						<img src="{{artist.images[0].url}}" class="circle profile">
+						<img ng-src="{{artist.images[0].url}}" class="circle profile">
 						{{artist.name}}
-						<button ng-class="" class="btn-flat btn-floating waves-effect waves-dark favorite" ng-show="user.id" ng-click="addArtist(artist)"><i class=" green-text material-icons">{{users[user.id].favedArtists.includes('test') ? 'delete' : 'add'}}</i></button>
+						<!-- button is hidden when user is logged out, and displays differently if artist is already favorited -->
+						<button class="btn-flat btn-floating waves-effect waves-dark favorite"
+						        ng-show="user" ng-click="addArtist(artist)">
+							<i class=" green-text material-icons">{{faved(artist) ? 'delete' : 'add'}}</i>
+						</button>
 					</div>
 					<div class="collapsible-body">
 						<span ng-repeat="genre in artist.genres" class="chip">{{genre}}</span>

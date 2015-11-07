@@ -9,7 +9,7 @@
 
 var loginApp = angular.module('loginApp', ['firebase']);
 
-var loginCtrl = loginApp.controller('loginCtrl', function($scope, $http, $firebaseAuth, $firebaseObject, $firebaseArray) {
+loginApp.controller('loginCtrl', function($scope, $http, $firebaseAuth, $firebaseObject, $firebaseArray) {
 
 	// display sign in first
 	$scope.signUpView = false;
@@ -22,6 +22,10 @@ var loginCtrl = loginApp.controller('loginCtrl', function($scope, $http, $fireba
 	// authorization object
 	$scope.authObj = $firebaseAuth(ref);
 
+	// user object
+	$scope.user = {};
+
+	// test if user is already logged in
 	var authData = $scope.authObj.$getAuth();
 
 	// LogIn
@@ -29,7 +33,7 @@ var loginCtrl = loginApp.controller('loginCtrl', function($scope, $http, $fireba
 		return $scope.authObj.$authWithPassword({
 			email: userEmail,
 			password: userPassword
-		})
+		});
 	};
 
 	// SignUp
@@ -40,40 +44,41 @@ var loginCtrl = loginApp.controller('loginCtrl', function($scope, $http, $fireba
 			password: $scope.newPassword
 		}).then($scope.logIn($scope.newEmail, $scope.newPassword))
 		.then(function (authData) {
-			$scope.userId = authData.uid;
+			$scope.user.id = authData.uid;
 			// add user to users firebase array
 			$scope.users[authData.uid] = {
 				//set user data
 				email: $scope.newEmail,
-				favedArtists: {'favedArtists': []}
+				favedArtists: ['test']
 			};
 			//save firebase array
 			$scope.users.$save();
-			window.location.replace("index.html");
+			window.location.replace("setup.html");
 		}).catch(function (error) {
-			console.error("Error: ", error);
+			$scope.error = error;
 		});
 	};
 
 	// SignIn
 	$scope.signIn = function() {
 		$scope.logIn($scope.email, $scope.password)
-		.then(function (authData) {
-			$scope.userId = authData.uid;
+		.then(function(authData) {
+			$scope.user.id = authData.uid;
 			window.location.replace("index.html");
 		}).catch(function(error) {
-			console.error("Error: ", error);
+			$scope.error = error;
 		});
 	};
 
 	// LogOut
 	$scope.logOut = function() {
 		$scope.authObj.$unauth();
-		$scope.userId = null;
+		$scope.user.id = null;
 		return;
 	};
 
-	//if page was directed to from logged in user
+
+	//if directed to from logged in user
 	if(authData) {
 		$scope.logOut();
 	}

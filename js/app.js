@@ -5,17 +5,23 @@ var myCtrl = myApp.controller('myCtrl', function($scope, $http, $firebaseAuth, $
     var ref = new Firebase("https://showfinder.firebaseio.com");
     var usersRef = ref.child('users');
 
+    //make users firebaseObject and firebaseAuth available to scope
     $scope.users = $firebaseObject(usersRef);
     $scope.authObj = $firebaseAuth(ref);
 
-    //initialize auth, get user
+    //initialize auth, fetch user
     var authData = $scope.authObj.$getAuth();
     if (authData) {
-        $scope.userId = authData.uid;
+        var user = usersRef.child(authData.uid);
+        $scope.user = $firebaseObject(user);
     }
 
 	Spotify.getAlbumTracks('6akEvsycLGftJxYudPjmqK').then(function (data) {
 		$scope.tracks = data.items;
 	});
+
+    $scope.logOut = function() {
+        window.location.replace("login.html")
+    }
 
 });

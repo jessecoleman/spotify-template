@@ -50,7 +50,8 @@
 	        <div class="col s12 m8 l6 offset-m2 offset-l3">
 	            <div class="card">
 	                <div class="card-content">
-	                    <form role="form" name="login" id="login" ng-show="!signUpView" novalidate>
+	                    <p ng-show="error" ng-bind="error"></p>
+		                <form role="form" name="login" id="login" ng-show="!signUpView" novalidate>
 	                        <div class="input-field">
                                 <label for="email">
 		                            <span ng-show="!login.emailField.$touched || login.emailField.$valid">email</span>
