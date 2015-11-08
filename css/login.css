@@ -20,3 +20,11 @@ body {
     display: table-cell;
     vertical-align: middle;
 }
+
+.error {
+    border-bottom: 1px solid #f44336;
+}
+
+.success {
+    border-bottom: 1px solid #4caf50;
+}

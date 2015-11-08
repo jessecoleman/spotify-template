@@ -31,14 +31,19 @@ setupApp.controller('setupCtrl', function($scope, $http, $firebaseAuth, $firebas
 		$scope.userFavedArtists.$save();
 	};
 
+	$scope.faved = function(artist) {
+		return $scope.userFavedArtists.$indexOf(artist) != -1;
+	};
+
+	/*
 	$scope.getAlbums = function(artist) {
-		Spotify.getArtistAlbums(artist.id).then(function(result) {
+		Spotify.getArtistTopTracks(artist.id, 'US')
+		.then(function(result) {
 			console.log(result);
 			return result;
 		})
 	};
 
-	console.log($scope.getAlbums('4MIULe6tfg2loNzBy5B9eu'));
 
 	$scope.expandArtist = function(obj, artist) {
 		if(!artist.show) {
@@ -51,10 +56,6 @@ setupApp.controller('setupCtrl', function($scope, $http, $firebaseAuth, $firebas
 
 	};
 
-	$scope.faved = function(artist) {
-		return contains($scope.userFavedArtists, artist);
-	};
-
 	var contains = function(obj, ele) {
 		obj.forEach(function(element) {
 			if(ele == element) {
@@ -62,6 +63,7 @@ setupApp.controller('setupCtrl', function($scope, $http, $firebaseAuth, $firebas
 			}
 		});
 	};
+	*/
 
 
 
