@@ -18,7 +18,7 @@ setupApp.controller('setupCtrl', function($scope, $http, $firebaseAuth, $firebas
 		$scope.userFavedArtists = $firebaseArray(favedArtistsRef);
 	}
 
-	$('.collapsible').collapsible();
+	$('.collapsible').collapsible({accordian: true});
 
 	$scope.searchArtists = function() {
 		Spotify.search($scope.artist, 'artist').then(function (data) {
@@ -29,12 +29,31 @@ setupApp.controller('setupCtrl', function($scope, $http, $firebaseAuth, $firebas
 	$scope.addArtist = function(artist) {
 		$scope.userFavedArtists.$add(artist.id);
 		$scope.userFavedArtists.$save();
-		console.log(artist);
+	};
+
+	$scope.getAlbums = function(artist) {
+		Spotify.getArtistAlbums(artist.id).then(function(result) {
+			console.log(result);
+			return result;
+		})
+	};
+
+	console.log($scope.getAlbums('4MIULe6tfg2loNzBy5B9eu'));
+
+	$scope.expandArtist = function(obj, artist) {
+		if(!artist.show) {
+			artist.show = true;
+		} else {
+			artist.show = !artist.show;
+		}
+		console.log(obj);
+		$('#' + artist.id + ' .info').append($('<img ng-repeat="album in getAlbums(artist)" ng-src="album.images[0]" />'))
+
 	};
 
 	$scope.faved = function(artist) {
 		return contains($scope.userFavedArtists, artist);
-	}
+	};
 
 	var contains = function(obj, ele) {
 		obj.forEach(function(element) {
@@ -42,7 +61,9 @@ setupApp.controller('setupCtrl', function($scope, $http, $firebaseAuth, $firebas
 				return true;
 			}
 		});
-	}
+	};
+
+
 
 	$scope.logOut = function() {
 		window.location.replace("login.html")
