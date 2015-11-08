@@ -29,6 +29,7 @@ setupApp.controller('setupCtrl', function($scope, $http, $firebaseAuth, $firebas
 	$scope.addArtist = function(artist) {
 		$scope.userFavedArtists.$add(artist.id);
 		$scope.userFavedArtists.$save();
+		console.log(artist);
 	};
 
 	$scope.faved = function(artist) {

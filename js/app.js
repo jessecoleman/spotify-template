@@ -16,7 +16,16 @@ var myCtrl = myApp.controller('myCtrl', function($scope, $http, $firebaseAuth, $
         $scope.user = $firebaseObject(user);
     }
 
-	Spotify.getAlbumTracks('6akEvsycLGftJxYudPjmqK').then(function (data) {
+	$http({
+        method: 'GET',
+        url: 'http://api.bandsintown.com/artists/Skrillex/events.json?app_id=SHOW_FINDER_APP'
+    }).then(function successCallBack(response) {
+        console.log(response);
+    }, function errorCallback(response) {
+
+    });
+
+    Spotify.getAlbumTracks('6akEvsycLGftJxYudPjmqK').then(function (data) {
 		$scope.tracks = data.items;
 	});
 
