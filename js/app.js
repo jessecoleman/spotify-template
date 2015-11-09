@@ -17,7 +17,10 @@ var myCtrl = myApp.controller('myCtrl', function($scope, $http, $firebaseAuth, $
         var favedArtistsRef = userRef.child('favedArtists');
         $scope.userFavedArtists = $firebaseArray(favedArtistsRef);
 
-        // I can't read the $scope.userFaved artists as an array here.
+        // I can't read the $scope.userFavedArtists as an array here.
+
+        // calling $scope.userFavedArtists[0], or $scope.userFavedArtists.forEach()
+        // doesn't work, get null value or undefined
 
         console.log($scope.userFavedArtists);
         // faved songs for voting
