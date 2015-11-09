@@ -32,40 +32,9 @@ setupApp.controller('setupCtrl', function($scope, $http, $firebaseAuth, $firebas
 	};
 
 	$scope.faved = function(artist) {
-		return $scope.userFavedArtists.$indexOf(artist) != -1;
+		//console.log($scope.userFavedArtists.$indexFor(artist.id));
+		return $scope.userFavedArtists.$indexFor(artist.id) != -1;
 	};
-
-	/*
-	$scope.getAlbums = function(artist) {
-		Spotify.getArtistTopTracks(artist.id, 'US')
-		.then(function(result) {
-			console.log(result);
-			return result;
-		})
-	};
-
-
-	$scope.expandArtist = function(obj, artist) {
-		if(!artist.show) {
-			artist.show = true;
-		} else {
-			artist.show = !artist.show;
-		}
-		console.log(obj);
-		$('#' + artist.id + ' .info').append($('<img ng-repeat="album in getAlbums(artist)" ng-src="album.images[0]" />'))
-
-	};
-
-	var contains = function(obj, ele) {
-		obj.forEach(function(element) {
-			if(ele == element) {
-				return true;
-			}
-		});
-	};
-	*/
-
-
 
 	$scope.logOut = function() {
 		window.location.replace("login.html")
