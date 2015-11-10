@@ -19,8 +19,9 @@ var myCtrl = myApp.controller('myCtrl', function($scope, $http, $firebaseAuth, $
 	        $scope.relatedArtists.forEach(function(artist) {
 		        Spotify.getArtistTopTracks(artist.id, 'US')
 	            .then(function(result1) {
-		            console.log(result1.tracks[1]);
-			        $scope.relatedArtistsTopSongs.push(result1.tracks[0]);
+			        if(result1.tracks[0].id) {
+				        $scope.relatedArtistsTopSongs.push(result1.tracks[0]);
+			        }
 	            });
             });
         });
@@ -34,7 +35,6 @@ var myCtrl = myApp.controller('myCtrl', function($scope, $http, $firebaseAuth, $
         // faved artists
 	    var favedArtistsRef = userRef.child('favedArtists');
         $scope.userFavedArtists = $firebaseArray(favedArtistsRef);
-        console.log($scope.userFavedArtists);
         // faved songs for voting
         var favedSongsRef = userRef.child('favedSongs');
         $scope.userFavedSongs = $firebaseArray(favedSongsRef);
@@ -47,16 +47,14 @@ var myCtrl = myApp.controller('myCtrl', function($scope, $http, $firebaseAuth, $
 		    buildSongs($scope.selectedArtist);
 		    //show related artists at end of slideshow
 		    $scope.displayArtists = [];
+		    $('.favorite').show();
 	    } else {
-		    console.log($scope.selectedArtist);
 		    $('#faved-artists').fadeIn(500);
 		    $('#start').hide();
 		    //show user favorited artists
 		    $scope.displayArtists = $scope.userFavedArtists;
-		    console.log($scope.userFavedArtists);
+		    $('.favorite').hide();
 	    }
-
-	    console.log($scope.relatedArtistsTopSongs);
 
         $scope.getArtistId = function(artist) {
             var current = Spotify.getArtist(artist.$value);
@@ -95,10 +93,10 @@ var myCtrl = myApp.controller('myCtrl', function($scope, $http, $firebaseAuth, $
         }
     };
 
-    $scope.upVote = function(song, liked, index) {
+    $scope.upVote = function(song, liked, that) {
 	    var currentCard = $('#' + song.id);
 
-        console.log(song + '\n' + index);
+        //console.log(song);
 	    //pause track
 	    if($scope.audioObject.pause != undefined) {
 		    $scope.audioObject.pause();
@@ -122,6 +120,18 @@ var myCtrl = myApp.controller('myCtrl', function($scope, $http, $firebaseAuth, $
 
 	$scope.findArtists = function(artist) {
 		window.location.replace('index.html?artist=' + artist.id);
+	};
+
+	$scope.addArtist = function(artist) {
+		console.log($scope.userFavedArtists);
+		//if($scope.userFavedArtists.$indexFor(artist) != -1) {
+		$scope.userFavedArtists.$add(artist);
+		/*
+		 } else {
+		 $scope.userFavedArtists.$remove(artist.id);
+		 }
+		 $scope.userFavedArtists.$save();
+		 */
 	};
 
 });
