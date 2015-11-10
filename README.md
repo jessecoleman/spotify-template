@@ -3,7 +3,11 @@ This template is an optional starting point for a challenge for the following [c
 
 What is the purpose of your project (i.e., why would someone use this app)?
 
-This app is designed to allow users to discover new artists that they might enjoy
+This app is designed to allow users to discover new artists that they might enjoy. It employs very simple
+logic for determining likes artists, listing out top songs by each related artist and asking the
+user to vote on each one. At the end, artists that contributed to the songs liked by the user are listed
+out for the user, at which point, they can add that artist to their favorited artists or perform another survey
+of that artist to show more related artists
 
 What is the URL of this project on your student web-server?
 

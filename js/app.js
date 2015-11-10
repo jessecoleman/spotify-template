@@ -77,6 +77,7 @@ var myCtrl = myApp.controller('myCtrl', function($scope, $http, $firebaseAuth, $
 
     $scope.audioObject = {};
 
+    // play or pause current song
     $scope.play = function(song) {
         if($scope.currentSong == song) {
             $scope.audioObject.pause();
@@ -123,6 +124,8 @@ var myCtrl = myApp.controller('myCtrl', function($scope, $http, $firebaseAuth, $
 		window.location.replace('index.html?artist=' + artist.id);
 	};
 
+    // add artist to faved artists, checking current faved artist for duplicates
+    // is currently limited by my angularfire skill
 	$scope.addArtist = function(artist) {
 		console.log($scope.userFavedArtists.$indexFor(artist));
 		//if($scope.userFavedArtists.$indexFor(artist) != -1) {

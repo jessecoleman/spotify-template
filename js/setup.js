@@ -26,6 +26,7 @@ setupApp.controller('setupCtrl', function($scope, $http, $firebaseAuth, $firebas
 		});
 	};
 
+	// add artist to favorited artists
 	$scope.addArtist = function(artist) {
 		console.log($scope.userFavedArtists);
 		//if($scope.userFavedArtists.$indexFor(artist) != -1) {
@@ -38,15 +39,18 @@ setupApp.controller('setupCtrl', function($scope, $http, $firebaseAuth, $firebas
 		*/
 	};
 
+	// get parameter from url to use for artist
 	$scope.findArtists = function(artist) {
 		window.location.replace('index.html?artist=' + artist.id);
 	};
 
+	// check if artist is faved (not working)
 	$scope.faved = function(artist) {
 		//console.log($scope.userFavedArtists.$indexFor(artist.id));
 		return $scope.userFavedArtists.$indexFor(artist.id) != -1;
 	};
 
+	// logout
 	$scope.logOut = function() {
 		window.location.replace("login.html")
 	}
