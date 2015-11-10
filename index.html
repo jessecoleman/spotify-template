@@ -37,19 +37,22 @@
 	<!-- Displays divs with questions that help develop a user's music tastes -->
 	<div class="container section">
 		<div class="row">
-			<div class="col s10 m6 offset-m3 offset-s1">
-				<button id="start" class="btn waves-effect waves-light green" ng-click="start()">Start</button>
-					<div class="card song-card" ng-repeat="song in relatedArtistsTopSongs track by $index" id="{{song.id}}">
-						<div class="card-image">
-							<img ng-src="{{song.album.images[0].url}}" />
-							<div class="card-title" ng-bind="song.name"></div>
-						</div>
-						<div class="card-action">
-							<button class="btn btn-flat white waves-effect" ng-click="play(song.preview_url)"><i class="material-icons">play_arrow</i></button>
-							<button class="btn btn-flat white waves-effect waves-green right" ng-click="upVote(song, true)"><i class="material-icons">thumb_up</i></button>
-							<button class="btn btn-flat white waves-effect waves-red right" ng-click="upVote(song, false)"><i class="material-icons">thumb_down</i></button>
-						</div>
+			<div class="col s12 m8 offset-m3 offset-s1">
+				<div id="start">
+					<p>You will rate the following songs in accordance with your satisfaction with their tunes</p>
+					<button class="btn waves-effect waves-light green" ng-click="start()">Start</button>
+				</div>
+				<div class="card song-card" ng-repeat="song in relatedArtistsTopSongs track by $index" id="{{song.id}}">
+					<div class="card-image">
+						<img ng-src="{{song.album.images[0].url}}" />
+						<div class="card-title" ng-bind="song.name"></div>
 					</div>
+					<div class="card-action">
+						<button class="btn btn-flat white waves-effect" ng-click="play(song.preview_url)"><i class="material-icons">play_arrow</i></button>
+						<button class="btn btn-flat white waves-effect waves-green right" ng-click="upVote(song, true)"><i class="material-icons">thumb_up</i></button>
+						<button class="btn btn-flat white waves-effect waves-red right" ng-click="upVote(song, false)"><i class="material-icons">thumb_down</i></button>
+					</div>
+				</div>
 				<div id="faved-artists" class="song-card">
 					<p ng-show="selectedArtist">Here are some artists you might enjoy based on the samples</p>
 					<p ng-show="!selectedArtist">Here are your favorited artists</p>
@@ -78,10 +81,6 @@
 						</li>
 					</ul>
 				</div>
-			</div>
-			<div class="col s12 m3">
-				<p>Listen to and up or down vote on the following tracks to help us determine artists that you may like.</p>
-
 			</div>
 		</div>
 	</div>

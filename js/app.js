@@ -19,7 +19,7 @@ var myCtrl = myApp.controller('myCtrl', function($scope, $http, $firebaseAuth, $
 	        $scope.relatedArtists.forEach(function(artist) {
 		        Spotify.getArtistTopTracks(artist.id, 'US')
 	            .then(function(result1) {
-			        if(result1.tracks[0].id) {
+			        if(result1.tracks && result1.tracks[0].id) {
 				        $scope.relatedArtistsTopSongs.push(result1.tracks[0]);
 			        }
 	            });
@@ -93,10 +93,10 @@ var myCtrl = myApp.controller('myCtrl', function($scope, $http, $firebaseAuth, $
         }
     };
 
+	//user votes on song
     $scope.upVote = function(song, liked, that) {
 	    var currentCard = $('#' + song.id);
 
-        //console.log(song);
 	    //pause track
 	    if($scope.audioObject.pause != undefined) {
 		    $scope.audioObject.pause();
@@ -114,6 +114,7 @@ var myCtrl = myApp.controller('myCtrl', function($scope, $http, $firebaseAuth, $
 
     };
 
+	//logs user out
     $scope.logOut = function() {
         window.location.replace("login.html")
     };
@@ -123,7 +124,7 @@ var myCtrl = myApp.controller('myCtrl', function($scope, $http, $firebaseAuth, $
 	};
 
 	$scope.addArtist = function(artist) {
-		console.log($scope.userFavedArtists);
+		console.log($scope.userFavedArtists.$indexFor(artist));
 		//if($scope.userFavedArtists.$indexFor(artist) != -1) {
 		$scope.userFavedArtists.$add(artist);
 		/*

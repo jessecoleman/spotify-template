@@ -60,6 +60,10 @@
 								ng-show="user" ng-click="findArtists(artist)">
 							<i class=" green-text material-icons">play_arrow</i>
 						</button>
+						<button class="btn-flat btn-floating waves-effect waves-dark favorite"
+						        ng-show="user" ng-click="addArtist(artist)">
+							<i class=" green-text material-icons">{{faved(artist) ? 'delete' : 'add'}}</i>
+						</button>
 					</div>
 					<div class="info" ng-show="artist.show">
 						<span ng-repeat="genre in artist.genres" class="chip">{{genre}}</span>
