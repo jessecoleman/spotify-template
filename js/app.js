@@ -9,57 +9,59 @@ var myCtrl = myApp.controller('myCtrl', function($scope, $http, $firebaseAuth, $
     $scope.users = $firebaseObject(usersRef);
     $scope.authObj = $firebaseAuth(ref);
 
+    // function to build songs list similar to artists you like
+	// add top song from each related artist
+    var buildSongs = function(artistId) {
+        Spotify.getRelatedArtists(artistId)
+	        .then(function(result) {
+	        $scope.relatedArtists = result.artists;
+	        //add top three tracks from each related artist to three arrays
+	        $scope.relatedArtists.forEach(function(artist) {
+		        Spotify.getArtistTopTracks(artist.id, 'US')
+	            .then(function(result1) {
+		            console.log(result1.tracks[1]);
+			        $scope.relatedArtistsTopSongs.push(result1.tracks[0]);
+	            });
+            });
+        });
+    };
+
     //initialize auth, fetch user
     var authData = $scope.authObj.$getAuth();
     if (authData) {
         var userRef = usersRef.child(authData.uid);
         $scope.user = $firebaseObject(userRef);
-        var favedArtistsRef = userRef.child('favedArtists');
+        // faved artists
+	    var favedArtistsRef = userRef.child('favedArtists');
         $scope.userFavedArtists = $firebaseArray(favedArtistsRef);
-
-        // I can't read the $scope.userFavedArtists as an array here.
-
-        // calling $scope.userFavedArtists[0], or $scope.userFavedArtists.forEach()
-        // doesn't work, get null value or undefined
-
         console.log($scope.userFavedArtists);
         // faved songs for voting
         var favedSongsRef = userRef.child('favedSongs');
         $scope.userFavedSongs = $firebaseArray(favedSongsRef);
-        // artists similar to favedArtists
-        var similarArtistsRef = userRef.child('similarArtists');
-        $scope.similarArtists = $firebaseObject(similarArtistsRef);
-        // songs contains top tracks of similar artists to users favorited artists
+        //artist to use in quiz, passed in url from setup.html
+        $scope.selectedArtist = window.location.search.substring(8);
+	    //0: artist, 1: #1 track, 2: #2 track, 3: #3 track
+	    $scope.relatedArtistsTopSongs = [];
+        // build songs from similar artists
+	    if($scope.selectedArtist) {
+		    buildSongs($scope.selectedArtist);
+		    //show related artists at end of slideshow
+		    $scope.displayArtists = [];
+	    } else {
+		    console.log($scope.selectedArtist);
+		    $('#faved-artists').fadeIn(500);
+		    $('#start').hide();
+		    //show user favorited artists
+		    $scope.displayArtists = $scope.userFavedArtists;
+		    console.log($scope.userFavedArtists);
+	    }
+
+	    console.log($scope.relatedArtistsTopSongs);
 
         $scope.getArtistId = function(artist) {
             var current = Spotify.getArtist(artist.$value);
             return current.name;
-        }
-
-        for(var artist in $scope.userFavedArtists) {
-            console.log(artist);
-        }
-
-        var buildSongs = function(artistId) {
-            Spotify.getArtistTopTracks(artistId, 'US')
-            .then(function(result) {
-                $scope.songs = result.tracks;
-            });
         };
-
-
-        buildSongs('1kM5rgJvkiDMOoKX56H6pX');
-
-
-        $scope.userFavedArtists.forEach(function(artist) {
-            console.log(artist);
-            if(angular.isArray(artist)) {
-                artist.forEach(function(current) {
-                    console.log(current);
-                });
-            }
-
-        });
     }
 
     // slideshow style transitions
@@ -67,11 +69,15 @@ var myCtrl = myApp.controller('myCtrl', function($scope, $http, $firebaseAuth, $
     var startButton = $('#start');
     $scope.start = function() {
         startButton.fadeOut(500, function() {
-            startButton.next().fadeIn(500);
+	        startButton.next().fadeIn(500);
         });
     };
 
-    $scope.audioObject = {}
+    $scope.faved = function(artist) {
+        return $scope.userFavedArtists.$indexFor(artist.id) != -1;
+    };
+
+    $scope.audioObject = {};
 
     $scope.play = function(song) {
         if($scope.currentSong == song) {
@@ -85,25 +91,37 @@ var myCtrl = myApp.controller('myCtrl', function($scope, $http, $firebaseAuth, $
             }
             $scope.audioObject = new Audio(song);
             $scope.audioObject.play();
-            $scope.currentSong = song
+            $scope.currentSong = song;
         }
-    }
+    };
 
-    $scope.upVote = function(song, liked) {
-        if(liked) {
-            $scope.userFavedSongs.$add(song.id);
-        }
-        var currentCard = $('#' + song.id);
+    $scope.upVote = function(song, liked, index) {
+	    var currentCard = $('#' + song.id);
+
+        console.log(song + '\n' + index);
+	    //pause track
+	    if($scope.audioObject.pause != undefined) {
+		    $scope.audioObject.pause();
+	    }
+	    //add artist
+	    if(liked) {
+		    song.artists.forEach(function(artist) {
+			    $scope.displayArtists.push(artist);
+		    });
+	    }
+
         currentCard.fadeOut(500, function() {
             currentCard.next().fadeIn(500);
         });
 
     };
 
-    $scope.tracks = Spotify.getArtistTopTracks("1e7uyBB3QYqNvrtb6RHDnm", "US");
-
     $scope.logOut = function() {
         window.location.replace("login.html")
-    }
+    };
+
+	$scope.findArtists = function(artist) {
+		window.location.replace('index.html?artist=' + artist.id);
+	};
 
 });

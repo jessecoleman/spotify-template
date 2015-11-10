@@ -54,9 +54,13 @@
 			<ul ul class="collapsible popout" data-collapsible="accordion">
 				<li ng-repeat="artist in artists" id="{{artist.id}}">
 					<div class="collapsible-header">
-						<img ng-src="{{artist.images[0].url}}" class="circle profile" ng-click="expandArtist(this, artist)">
+						<img ng-src="{{artist.images[0].url}}" class="circle profile" ng-click="artist.show = !artist.show">
 						{{artist.name}}
 						<!-- button is hidden when user is logged out, and displays differently if artist is already favorited -->
+						<button class="btn-flat btn-floating waves-effect waves-dark"
+								ng-show="user" ng-click="findArtists(artist)">
+							<i class=" green-text material-icons">play_arrow</i>
+						</button>
 						<button class="btn-flat btn-floating waves-effect waves-dark favorite"
 						        ng-show="user" ng-click="addArtist(artist)">
 							<i class=" green-text material-icons">{{faved(artist) ? 'delete' : 'add'}}</i>

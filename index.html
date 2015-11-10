@@ -40,19 +40,40 @@
 		<div class="row">
 			<div class="col s10 m6 offset-m3 offset-s1">
 				<button id="start" class="btn waves-effect waves-light green" ng-click="start()">Start</button>
-				<div class="card song-card" id="{{song.id}}" ng-repeat="song in songs">
-					<div class="card-image">
-						<img ng-src="{{song.album.images[0].url}}" />
-						<div class="card-title" ng-bind="song.name"></div>
+					<div class="card song-card" ng-repeat="song in relatedArtistsTopSongs track by $index" id="{{song.id}}">
+						<div class="card-image">
+							<img ng-src="{{song.album.images[0].url}}" />
+							<div class="card-title" ng-bind="song.name"></div>
+						</div>
+						<div class="card-action">
+							<button class="btn btn-flat white waves-effect" ng-click="play(song.preview_url)"><i class="material-icons">play_arrow</i></button>
+							<button class="btn btn-flat white waves-effect waves-green right" ng-click="upVote(song, true, relatedArtistsTopSongs.indexOf(song))"><i class="material-icons">thumb_up</i></button>
+							<button class="btn btn-flat white waves-effect waves-red right" ng-click="upVote(song, false, relatedArtistsTopSongs.indexOf(song))"><i class="material-icons">thumb_down</i></button>
+						</div>
 					</div>
-					<div class="card-action">
-						<button class="btn btn-flat white waves-effect" ng-click="play(song.preview_url)"><i class="material-icons">play_arrow</i></button>
-						<button class="btn btn-flat white waves-effect waves-green right" ng-click="upVote(song, true)"><i class="material-icons">thumb_up</i></button>
-						<button class="btn btn-flat white waves-effect waves-red right" ng-click="upVote(song, false)"><i class="material-icons">thumb_down</i></button>
-					</div>
-				</div>
-				<div ng-repeat="artist in userFavedArtists">
-					{{getArtistId(artist)}}
+				<div id="faved-artists" class="song-card">
+					<p ng-show="selectedArtist">Here are some artists you might enjoy based on the samples</p>
+					<p ng-show="!selectedArtist">Here are your favorited artists</p>
+					<ul class="collapsible popout" data-collapsible="accordion">
+						<li ng-repeat="artist in displayArtists" id="{{artist.id}}">
+							<div class="collapsible-header">
+								<img ng-src="{{artist.images[0].url}}" class="circle profile" ng-click="artist.show = !artist.show">
+								{{artist.name}}
+								<button class="btn-flat btn-floating waves-effect waves-dark favorite" ng-click="findArtists(artist)">
+									<i class=" green-text material-icons">play_arrow</i>
+								</button>
+							</div>
+							<div class="info" ng-show="artist.show">
+								<span ng-repeat="genre in artist.genres" class="chip">{{genre}}</span>
+								<!--
+								<div>
+									<img ng-repeat="album in getAlbums(artist)" ng-src="album.images[0]" />
+								</div>
+								-->
+								<p>This is some text</p>
+							</div>
+						</li>
+					</ul>
 				</div>
 			</div>
 			<div class="col s12 m3">

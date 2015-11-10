@@ -49,7 +49,7 @@ loginApp.controller('loginCtrl', function($scope, $http, $firebaseAuth, $firebas
 			$scope.users[authData.uid] = {
 				//set user data
 				email: $scope.newEmail,
-				favedArtists: ['test']
+				favedArtists: []
 			};
 			//save firebase array
 			$scope.users.$save();
@@ -64,7 +64,7 @@ loginApp.controller('loginCtrl', function($scope, $http, $firebaseAuth, $firebas
 		$scope.logIn($scope.email, $scope.password)
 		.then(function(authData) {
 			$scope.user.id = authData.uid;
-			window.location.replace("index.html");
+			window.location.replace("setup.html");
 		}).catch(function(error) {
 			$scope.error = error;
 		});

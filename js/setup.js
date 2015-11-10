@@ -27,8 +27,19 @@ setupApp.controller('setupCtrl', function($scope, $http, $firebaseAuth, $firebas
 	};
 
 	$scope.addArtist = function(artist) {
-		$scope.userFavedArtists.$add(artist.id);
+		console.log($scope.userFavedArtists);
+		//if($scope.userFavedArtists.$indexFor(artist) != -1) {
+			$scope.userFavedArtists.$add(artist);
+		/*
+		} else {
+			$scope.userFavedArtists.$remove(artist.id);
+		}
 		$scope.userFavedArtists.$save();
+		*/
+	};
+
+	$scope.findArtists = function(artist) {
+		window.location.replace('index.html?artist=' + artist.id);
 	};
 
 	$scope.faved = function(artist) {
