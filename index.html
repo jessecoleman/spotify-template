@@ -62,11 +62,11 @@
 								<img ng-src="{{artist.images[0].url}}" class="circle profile" ng-click="artist.show = !artist.show">
 								<span>{{artist.name}}</span>
 								<button class="btn-flat btn-floating waves-effect waves-dark favorite" ng-click="findArtists(artist)">
-									<i class=" green-text material-icons">play_arrow</i>
+									<i class=" green-text material-icons">queue_music</i>
 								</button>
 								<button class="btn-flat btn-floating waves-effect waves-dark favorite"
 								        ng-show="user" ng-click="addArtist(artist)">
-									<i class=" green-text material-icons">{{faved(artist) ? 'delete' : 'add'}}</i>
+									<i class=" green-text material-icons">{{faved(artist) ? 'delete' : 'stars'}}</i>
 								</button>
 							</div>
 							<div class="info" ng-show="artist.show">
